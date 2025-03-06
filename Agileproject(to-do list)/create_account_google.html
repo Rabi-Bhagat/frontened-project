@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account From Google</title>
+</head>
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+    }
+    /* body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+} */
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: aquamarine; /* Ensures the body background is still visible */
+}
+
+
+
+    #google a img{
+        height: 15rem;
+        width: 15rem;
+        
+    }
+    #google{
+        display: grid;
+        justify-content: center;
+    }
+    .middle {
+        margin-top: 80px;
+    }
+    .middle p,h1{
+        text-align: center;
+    }
+.submit_form{
+            display: flex;
+            flex-direction: column;
+            column-gap: 20px;
+            margin-left: 4rem;
+            margin-right: 4rem;
+            margin-top: 30px;
+    
+}
+
+    input{
+        height: 30px;
+    }
+    .ironman::placeholder{
+        color: gold;
+        
+    }
+    .ironman{
+        color: white;
+            background-color: gray;
+            margin-top: 30px;
+            border: 3px solid silver;
+            
+        }
+        #login{
+            text-align: center;
+            border: 3px solid silver ;
+            border-radius: 12px;
+            background-color:aqua;
+            padding: 20px;
+            margin:30px 6rem 0rem 6rem;
+        }
+        #login a{
+            text-decoration: none;
+        }
+        .back{
+            margin-top: 0px;
+            display: grid;
+            justify-content: center;
+        }
+        .back a img{
+            height: 80px;
+            width: 80px;
+        }
+        footer.extra_section {
+    background-color: rgb(16, 33, 33);
+    border-radius: 3rem 3rem 0px 0px;
+    margin-top: 6rem;
+    padding: 4rem;
+}
+
+
+     .symbol{
+        background-color: aquamarine;
+        border: 0px solid aquamarine;
+        border-radius: 12px;
+     }
+     /* @media (max-width:768px) {
+
+        .extra_section{
+            
+            margin-top: 6rem;
+        padding: 1rem;
+        }
+
+     } */
+</style>
+
+<header>
+    <div id="google">
+        <a href="create_account_google.html" target="_blank" rel="it's just signup from google">
+            <img src="https://img.icons8.com/3d-fluency/94/google-logo.png" alt="google-logo" />
+        </a>
+    </div>
+    <div class="middle">
+        <h1>Sign in</h1>
+        <p>Use your Google Account. The account will be added to these device and available to other Google apps.</p>
+    </div>
+</header>
+
+
+<body style="background-color: aquamarine;">
+
+    <form action="" class="submit_form">
+        <input type="text"  placeholder="Username" required class="ironman">
+        <input type="text"  placeholder="Email" required class="ironman">
+        <input type="password"  placeholder="Enter your password" required class="ironman">
+    </form>
+    <div id="login">
+        <a href="#">Log in</a>
+    </div>
+</body>
+
+<footer style="background-color:rgb(16, 33, 33)" class="extra_section">
+    <div class="back">
+        <a href="letsstart.html"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/circled-left.png" alt="circled-left" class="symbol"/></a>
+    </div>
+</footer>
+
+</html>

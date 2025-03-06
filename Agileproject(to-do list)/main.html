@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Tasks</title>
+    <link rel="stylesheet" href="add_task.css">
+
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+
+    <style>
+
+
+
+
+
+        /* Style to make the calendar smaller */
+        #calendar-container {
+            width: 300px; /* Adjust width */
+            height: 250px; /* Adjust height */
+            margin: auto;
+            overflow: hidden;
+        }
+
+        #calendar {
+            max-width: 100%;
+            height: 100%;
+        }
+
+        /* Reduce font size of calendar text */
+        .fc {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<header>
+    <div>
+        <h2 class="first" id="addtask">Add Tasks</h2>
+        <form action="post">
+            <input type="text" class="search" placeholder="Finish Report">
+        </form>
+    </div>
+
+    <div>
+        <label for="Categories"><h2 class="first">Choose a category:</h2></label>
+    </div>
+    <select id="Categories" name="Categories">
+        <option value="Work">Work</option>
+        <option value="Personal">Personal</option>
+        <option value="Health">Health</option>
+        <option value="Shopping">Shopping</option>
+    </select>
+</header>
+
+<body>
+
+    <h2 class="first">Date:</h2>
+    <div id="calendar-container">
+        <div id="calendar"></div> <!-- FullCalendar with smaller size -->
+    </div>
+
+    <h2 class="first">Reminder:</h2>
+    <div class="date">
+        <img width="54" height="54" src="https://img.icons8.com/material-sharp/24/alarm--v2.png" alt="alarm--v2"/>
+        <h3>Set Reminder</h3>
+    </div>
+
+    <div>
+        <h2 class="first" id="form">Notes:</h2>
+        <input type="text" class="rectangle">
+    </div>
+
+</body>
+
+<footer class="footer">
+    <a href="home.html">
+        <img class="home_icon" width="50" height="50" src="https://img.icons8.com/ios-glyphs/30/home-page--v1.png" alt="home-page--v1"/>
+    </a>
+    <a href="">
+        <img class="tick_mark" width="50" height="50" src="https://img.icons8.com/ios-filled/50/checkmark--v1.png" alt="checkmark--v1"/>
+    </a>
+</footer>
+
+<!-- FullCalendar Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth', // Month view
+            selectable: true, // Allows selection
+            dateClick: function(info) {
+                alert('Selected Date: ' + info.dateStr); // Alert the selected date
+            },
+            height: '100%', // Adjust height dynamically
+            contentHeight: 'auto'
+        });
+        calendar.render();
+    });
+</script>
+
+</html>
