@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signature Creator</title>
-    <!-- <link rel="icon" href="favicon-16x16.png" type="image/png"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" crossorigin="anonymous">
     <style>
         body {
@@ -33,21 +32,24 @@
             border: 3px solid #343a40;
             border-radius: 5px;
             width: 100%;
-            height: 400px;
             background-color: #ffffff;
+            touch-action: none;
         }
         .controls {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            gap: 20px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
         .control-group {
             flex: 1;
-            min-width: 200px;
+            min-width: 150px;
         }
         .control-group label {
             font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
         }
         .buttons {
             display: flex;
@@ -56,37 +58,65 @@
             gap: 10px;
             margin-top: 20px;
         }
+        .tooltip-wrapper {
+            position: relative;
+        }
+        .tooltip-wrapper .tooltip-text {
+            visibility: hidden;
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip-wrapper:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
         @media (max-width: 768px) {
             .canvas {
-                height: 250px;
+                height: 300px;
             }
             .header img {
                 max-width: 100px;
             }
+            .control-group {
+                min-width: 120px;
+            }
         }
         @media (max-width: 576px) {
             .main {
-                padding: 10px;
+                padding: 15px;
+            }
+            .controls {
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
     <header class="header">
-        <h1 style="color: gold;">signature Website</h1>
+        <h1 style="color: gold;">Signature Creator</h1>
     </header>
     <div class="main">
-        <div class="controls mb-4">
+        <div class="controls">
             <div class="control-group">
-                <label for="colorselector">Text Color</label>
-                <input class="form-control" type="color" id="colorselector">
+                <label for="colorselector">Pen Color</label>
+                <input class="form-control" type="color" id="colorselector" value="#000000">
             </div>
             <div class="control-group">
                 <label for="canvascolor">Background Color</label>
-                <input class="form-control" type="color" id="canvascolor">
+                <input class="form-control" type="color" id="canvascolor" value="#ffffff">
             </div>
             <div class="control-group">
-                <label for="fontpicker">Stroke Width</label>
+                <label for="fontpicker">Pen Width</label>
                 <select class="custom-select" id="fontpicker">
                     <option value="3">3px</option>
                     <option value="5">5px</option>
@@ -96,12 +126,51 @@
                     <option value="50">50px</option>
                 </select>
             </div>
+            <div class="control-group">
+                <label for="penstyle">Pen Style</label>
+                <select class="custom-select" id="penstyle">
+                    <option value="solid">Solid</option>
+                    <option value="dashed">Dashed</option>
+                    <option value="dotted">Dotted</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="canvassize">Canvas Size</label>
+                <select class="custom-select" id="canvassize">
+                    <option value="small">Small (600x250)</option>
+                    <option value="medium" selected>Medium (900x350)</option>
+                    <option value="large">Large (1200x450)</option>
+                </select>
+            </div>
         </div>
-        <canvas class="canvas" id="mycanvas" width="900" height="350"></canvas>
+        <canvas class="canvas" id="mycanvas"></canvas>
         <div class="buttons">
-            <button class="btn btn-success" id="savebutton">Save Signature</button>
-            <button class="btn btn-danger" id="clearbutton">Clear</button>
-            <button class="btn btn-warning" id="retrivebutton">Retrieve Signature</button>
+            <div class="tooltip-wrapper">
+                <button class="btn btn-primary" id="undobutton">Undo</button>
+                <span class="tooltip-text">Undo last action</span>
+            </div>
+            <div class="tooltip-wrapper">
+                <button class="btn btn-primary" id="redobutton">Redo</button>
+                <span class="tooltip-text">Redo undone action</span>
+            </div>
+            <div class="tooltip-wrapper">
+                <button class="btn btn-success" id="savebutton">Save</button>
+                <span class="tooltip-text">Save signature as image</span>
+            </div>
+            <div class="control-group">
+                <select class="custom-select" id="formatselect">
+                    <option value="png">PNG</option>
+                    <option value="jpeg">JPEG</option>
+                </select>
+            </div>
+            <div class="tooltip-wrapper">
+                <button class="btn btn-danger" id="clearbutton">Clear</button>
+                <span class="tooltip-text">Clear canvas</span>
+            </div>
+            <div class="tooltip-wrapper">
+                <button class="btn btn-warning" id="retrivebutton">Retrieve</button>
+                <span class="tooltip-text">Load saved signature</span>
+            </div>
         </div>
     </div>
 
@@ -113,16 +182,90 @@
         const savebutton = document.getElementById("savebutton");
         const retrivebutton = document.getElementById("retrivebutton");
         const fontpicker = document.getElementById("fontpicker");
-        const ctx = canvas.getContext("2d");
+        const penstyle = document.getElementById("penstyle");
+        const canvassize = document.getElementById("canvassize");
+        const undobutton = document.getElementById("undobutton");
+        const redobutton = document.getElementById("redobutton");
+        const formatselect = document.getElementById("formatselect");
+        const ctx = canvas.getContext("2d", { alpha: true });
 
         let isDrawing = false;
         let lastX = 0;
         let lastY = 0;
+        let history = [];
+        let redoStack = [];
 
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        function setCanvasSize(size) {
+            const sizes = {
+                small: { width: 600, height: 250 },
+                medium: { width: 900, height: 350 },
+                large: { width: 1200, height: 450 }
+            };
+            const { width, height } = sizes[size] || sizes.medium;
+            const scale = window.devicePixelRatio || 1;
+            canvas.width = width * scale;
+            canvas.height = height * scale;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.scale(scale, scale);
+            resetCanvas();
+        }
+
+        function resetCanvas() {
+            ctx.fillStyle = canvascolor.value;
+            ctx.fillRect(0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
+            saveState();
+        }
+
+        function setPenStyle(style) {
+            ctx.setLineDash([]);
+            if (style === "dashed") {
+                ctx.setLineDash([10, 10]);
+            } else if (style === "dotted") {
+                ctx.setLineDash([2, 10]);
+            }
+        }
+
+        function saveState() {
+            history.push(canvas.toDataURL());
+            if (history.length > 50) history.shift();
+            redoStack = [];
+            undobutton.disabled = false;
+            redobutton.disabled = true;
+        }
+
+        function undo() {
+            if (history.length > 1) {
+                redoStack.push(history.pop());
+                const img = new Image();
+                img.src = history[history.length - 1];
+                img.onload = () => ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                redobutton.disabled = false;
+                undobutton.disabled = history.length <= 1;
+            }
+        }
+
+        function redo() {
+            if (redoStack.length > 0) {
+                const img = new Image();
+                img.src = redoStack.pop();
+                img.onload = () => {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    history.push(canvas.toDataURL());
+                    undobutton.disabled = false;
+                };
+                redobutton.disabled = redoStack.length === 0;
+            }
+        }
+
+        
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
         ctx.strokeStyle = colorselector.value;
         ctx.lineWidth = fontpicker.value;
+        setPenStyle(penstyle.value);
+        setCanvasSize(canvassize.value);
 
         colorselector.addEventListener('input', () => {
             ctx.strokeStyle = colorselector.value;
@@ -130,40 +273,100 @@
 
         canvascolor.addEventListener('input', () => {
             ctx.fillStyle = canvascolor.value;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
+            saveState();
         });
 
         fontpicker.addEventListener('change', () => {
             ctx.lineWidth = fontpicker.value;
         });
 
+        penstyle.addEventListener('change', () => {
+            setPenStyle(penstyle.value);
+        });
+
+        canvassize.addEventListener('change', () => {
+            setCanvasSize(canvassize.value);
+        });
+
+        function getCoordinates(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scale = window.devicePixelRatio || 1;
+            if (e.type.includes('touch')) {
+                return {
+                    x: (e.touches[0].clientX - rect.left) * scale,
+                    y: (e.touches[0].clientY - rect.top) * scale
+                };
+            }
+            return {
+                x: e.offsetX * scale,
+                y: e.offsetY * scale
+            };
+        }
+
         canvas.addEventListener('mousedown', (e) => {
             isDrawing = true;
-            [lastX, lastY] = [e.offsetX, e.offsetY];
+            const { x, y } = getCoordinates(e);
+            [lastX, lastY] = [x, y];
+            ctx.beginPath();
+            ctx.moveTo(x / window.devicePixelRatio, y / window.devicePixelRatio);
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isDrawing = true;
+            const { x, y } = getCoordinates(e);
+            [lastX, lastY] = [x, y];
+            ctx.beginPath();
+            ctx.moveTo(x / window.devicePixelRatio, y / window.devicePixelRatio);
         });
 
         canvas.addEventListener('mousemove', (e) => {
             if (!isDrawing) return;
+            const { x, y } = getCoordinates(e);
             ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.moveTo(lastX / window.devicePixelRatio, lastY / window.devicePixelRatio);
+            ctx.lineTo(x / window.devicePixelRatio, y / window.devicePixelRatio);
             ctx.stroke();
-            [lastX, lastY] = [e.offsetX, e.offsetY];
+            [lastX, lastY] = [x, y];
         });
 
-        canvas.addEventListener('mouseup', () => isDrawing = false);
-        canvas.addEventListener('mouseout', () => isDrawing = false);
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const { x, y } = getCoordinates(e);
+            ctx.beginPath();
+            ctx.moveTo(lastX / window.devicePixelRatio, lastY / window.devicePixelRatio);
+            ctx.lineTo(x / window.devicePixelRatio, y / window.devicePixelRatio);
+            ctx.stroke();
+            [lastX, lastY] = [x, y];
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            if (isDrawing) saveState();
+            isDrawing = false;
+        });
+
+        canvas.addEventListener('touchend', () => {
+            if (isDrawing) saveState();
+            isDrawing = false;
+        });
+
+        canvas.addEventListener('mouseout', () => {
+            if (isDrawing) saveState();
+            isDrawing = false;
+        });
 
         clearbutton.addEventListener('click', () => {
-            ctx.fillStyle = canvascolor.value || "#ffffff";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            resetCanvas();
         });
 
         savebutton.addEventListener('click', () => {
-            const dataURL = canvas.toDataURL();
+            const format = formatselect.value;
+            const dataURL = canvas.toDataURL(`image/${format}`, format === 'jpeg' ? 0.9 : 1.0);
             localStorage.setItem('canvasContents', dataURL);
             const link = document.createElement('a');
-            link.download = 'mysignature.png';
+            link.download = `mysignature.${format}`;
             link.href = dataURL;
             link.click();
         });
@@ -173,9 +376,17 @@
             if (savedCanvas) {
                 const img = new Image();
                 img.src = savedCanvas;
-                img.onload = () => ctx.drawImage(img, 0, 0);
+                img.onload = () => {
+                    ctx.fillStyle = canvascolor.value;
+                    ctx.fillRect(0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    saveState();
+                };
             }
         });
+
+        undobutton.addEventListener('click', undo);
+        redobutton.addEventListener('click', redo);
     </script>
 </body>
 </html>
