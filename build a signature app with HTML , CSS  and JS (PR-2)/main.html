@@ -1,383 +1,181 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>signature Page</title>
+    <title>Signature Creator</title>
+    <!-- <link rel="icon" href="favicon-16x16.png" type="image/png"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" crossorigin="anonymous">
     <style>
-        .main{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50% );
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .canvas{
-            border: 5px solid black;
-        }
-        .bottom{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            margin: 15px 5px 15px 85px ;
-            
-        }
-        .top{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            margin: 15px 0;
-        }
-        .block, .input, .select, .bottom{
-            width: 70%;
-        }
-        .top>block{
-            margin: 10px;
-        }
-        .bottom>button{
-            margin: 10px;
-        }
-
-        .block>p{
-            margin: 10px auto;
-            width: 50%;
+        .header {
             text-align: center;
-           border: 3px solid red;
-           border-radius: 20px;
-           background-color: deepskyblue;
+            padding: 20px 0;
+            background-color: #343a40;
         }
-        
-
-
-        
-    </style>
-    <link rel="icon" href="fav icon/favicon-16x16.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-<body>
-    <div class="main">
-    <div class="top">
-        <div class="block">
-            <p>Text Color Selector</p>
-            <input class="form-control" type="color" id="colorselector" />
-
-        </div>
-       <div class="block">
-        <p>Background Selector</p>
-        <input class="form-control" type="color" id="canvascolor" >
-       </div>
-       <div class="block">
-        <p>Font Size</p>
-        <select class="custom-select" type="select" id="fontpicker">
-            <option value="3">3px</option>
-            <option value="5">5px</option>
-            <option value="12">12px</option>
-            <option value="20">20px</option>
-            <option value="40">40px</option>
-            <option value="50">50px</option>
-        </select>
-       </div>
-    </div>
-       <canvas class="canvas" id="mycanvas" width="900" height="450"></canvas>
-       <div class="bottom">
-           <button type="button" class="btn btn-sucess" id="savebutton"> Save and Sigunature</button>
-           <button type="button" class="btn btn-danger" id="clearbutton"> clear</button>
-        <button type="button" class="btn btn-warning" id="retrivebutton"> retrive  from previous signature</button>
-
-       </div>
-    </div>
-
-    <script>
-        const colorselector = document.getElementById("colorselector");
-        const canvascolor = document.getElementById("canvascolor");
-        const canvas = document.getElementById("mycanvas");
-        const clearbutton = document.getElementById("clearbutton");
-        const savebutton = document.getElementById("savebutton");
-        const fontpicker = document.getElementById("fontpicker");
-        const ctx = canvas.getContext("2d"); // Corrected here
-    
-        let isDrawing = false; // Global variable
-        let lastX = 0;
-        let lastY = 0;
-    
-        colorselector.addEventListener('change', (e) => {
-            ctx.strokeStyle = e.target.value;
-            ctx.fillStyle = e.target.value;
-        });
-    
-        canvas.addEventListener('mousedown', (e) => {
-            isDrawing = true;
-            lastX = e.offsetX; // Corrected here
-            lastY = e.offsetY;
-        });
-    
-        canvas.addEventListener('mousemove', (e) => {
-            if (isDrawing) {
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(e.offsetX, e.offsetY); // Corrected here
-                ctx.stroke();
-    
-                lastX = e.offsetX;
-                lastY = e.offsetY;
-            }
-        });
-    
-        canvas.addEventListener('mouseup', () => {
-            isDrawing = false;
-        });
-    
-        canvas.addEventListener('mouseout', () => {
-            isDrawing = false;
-        });
-
-        canvas.addEventListener('mouseup', () => {
-            isDrawing = false;
-        });
-
-        canvascolor.addEventListener('change', (e) => {
-    ctx.fillStyle = e.target.value;
-    ctx.fillRect(0, 0, canvas.width, canvas.height); 
-});
-fontpicker.addEventListener('change', (event) => {
-            ctx.lineWidth = event.target.value;
-           
-        });
-
-        clearbutton.addEventListener('click', () => {
-            // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }) 
-        
-        savebutton.addEventListener('click', () => {
-            localStorage.setItem('canvasContents', canvas.toDataURL());
-            // Create a new <a> element
-            let link = document.createElement('a');
-
-            // Set the download attribute and the href attribute of the <a> element
-            link.download = 'my-canvas.png';
-            link.href = canvas.toDataURL();
-
-            // Dispatch a click event on the <a> element
-            link.click();
-        });
-
-        retrivebutton.addEventListener('click', () => {
-            // Retrieve the saved canvas contents from local storage
-            let savedCanvas = localStorage.getItem('canvasContents');
-
-            if (savedCanvas) {
-                let img = new Image();
-                img.src = savedCanvas;
-                ctx.drawImage(img, 0, 0);
-            }
-        });
-
-
-
-        
-        
-    </script>
-    
-
-    
-</body>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>signature Page</title>
-    <style>
-        .header{
-            margin-top: 0%;
+        .header img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 10px;
+        }
+        .main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .canvas {
+            border: 3px solid #343a40;
+            border-radius: 5px;
+            width: 100%;
+            height: 400px;
+            background-color: #ffffff;
+        }
+        .controls {
             display: flex;
-            display: grid;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .control-group label {
+            font-weight: bold;
+        }
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
             justify-content: center;
-            justify-content: flex-end;
-            padding-top: 50%;
+            gap: 10px;
+            margin-top: 20px;
         }
-        .main{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50% );
+        @media (max-width: 768px) {
+            .canvas {
+                height: 250px;
+            }
+            .header img {
+                max-width: 100px;
+            }
         }
-        .canvas{
-            border: 5px solid black;
+        @media (max-width: 576px) {
+            .main {
+                padding: 10px;
+            }
         }
-        .bottom{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            margin: 15px 5px 15px 85px ;
-            
-        }
-        .top{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            margin: 15px 0;
-        }
-        .block, .input, .select, .bottom{
-            width: 70%;
-        }
-        .top>block{
-            margin: 10px;
-        }
-        .bottom>button{
-            margin: 10px;
-        }
-
-        .block>p{
-            margin: 10px auto;
-            width: 50%;
-            text-align: center;
-           border: 3px solid red;
-           border-radius: 20px;
-           background-color: deepskyblue;
-        }
-        
-
-
-        
     </style>
-    <link rel="icon" href="fav icon/favicon-16x16.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
-
 <body>
+    <header class="header">
+        <h1 style="color: gold;">signature Website</h1>
+    </header>
     <div class="main">
-    <div class="top">
-        <div class="block">
-            <p>Text Color Selector</p>
-            <input class="form-control" type="color" id="colorselector" />
-
+        <div class="controls mb-4">
+            <div class="control-group">
+                <label for="colorselector">Text Color</label>
+                <input class="form-control" type="color" id="colorselector">
+            </div>
+            <div class="control-group">
+                <label for="canvascolor">Background Color</label>
+                <input class="form-control" type="color" id="canvascolor">
+            </div>
+            <div class="control-group">
+                <label for="fontpicker">Stroke Width</label>
+                <select class="custom-select" id="fontpicker">
+                    <option value="3">3px</option>
+                    <option value="5">5px</option>
+                    <option value="12">12px</option>
+                    <option value="20">20px</option>
+                    <option value="40">40px</option>
+                    <option value="50">50px</option>
+                </select>
+            </div>
         </div>
-       <div class="block">
-        <p>Background Selector</p>
-        <input class="form-control" type="color" id="canvascolor" >
-       </div>
-       <div class="block">
-        <p>Font Size</p>
-        <select class="custom-select" type="select" id="fontpicker">
-            <option value="3">3px</option>
-            <option value="5">5px</option>
-            <option value="12">12px</option>
-            <option value="20">20px</option>
-            <option value="40">40px</option>
-            <option value="50">50px</option>
-        </select>
-       </div>
+        <canvas class="canvas" id="mycanvas" width="900" height="350"></canvas>
+        <div class="buttons">
+            <button class="btn btn-success" id="savebutton">Save Signature</button>
+            <button class="btn btn-danger" id="clearbutton">Clear</button>
+            <button class="btn btn-warning" id="retrivebutton">Retrieve Signature</button>
+        </div>
     </div>
-       <canvas class="canvas" id="mycanvas" width="900" height="350"></canvas>
-       <div class="bottom">
-           <button type="button" class="btn btn-sucess" id="savebutton"> Save and Sigunature</button>
-           <button type="button" class="btn btn-danger" id="clearbutton"> clear</button>
-        <button type="button" class="btn btn-warning" id="retrivebutton"> retrive  from previous signature</button>
 
-       </div>
-    </div>
-   
     <script>
         const colorselector = document.getElementById("colorselector");
         const canvascolor = document.getElementById("canvascolor");
         const canvas = document.getElementById("mycanvas");
         const clearbutton = document.getElementById("clearbutton");
         const savebutton = document.getElementById("savebutton");
+        const retrivebutton = document.getElementById("retrivebutton");
         const fontpicker = document.getElementById("fontpicker");
-        const ctx = canvas.getContext("2d"); 
-    
-        let isDrawing = false; 
+        const ctx = canvas.getContext("2d");
+
+        let isDrawing = false;
         let lastX = 0;
         let lastY = 0;
-    
-        colorselector.addEventListener('change', (e) => {
-            ctx.strokeStyle = e.target.value;
-            ctx.fillStyle = e.target.value;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = colorselector.value;
+        ctx.lineWidth = fontpicker.value;
+
+        colorselector.addEventListener('input', () => {
+            ctx.strokeStyle = colorselector.value;
         });
-    
+
+        canvascolor.addEventListener('input', () => {
+            ctx.fillStyle = canvascolor.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        });
+
+        fontpicker.addEventListener('change', () => {
+            ctx.lineWidth = fontpicker.value;
+        });
+
         canvas.addEventListener('mousedown', (e) => {
             isDrawing = true;
-            lastX = e.offsetX; 
-            lastY = e.offsetY;
+            [lastX, lastY] = [e.offsetX, e.offsetY];
         });
-    
+
         canvas.addEventListener('mousemove', (e) => {
-            if (isDrawing) {
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(e.offsetX, e.offsetY); 
-                ctx.stroke();
-    
-                lastX = e.offsetX;
-                lastY = e.offsetY;
-            }
-        });
-    
-        canvas.addEventListener('mouseup', () => {
-            isDrawing = false;
-        });
-    
-        canvas.addEventListener('mouseout', () => {
-            isDrawing = false;
+            if (!isDrawing) return;
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            [lastX, lastY] = [e.offsetX, e.offsetY];
         });
 
-        canvas.addEventListener('mouseup', () => {
-            isDrawing = false;
-        });
-
-        canvascolor.addEventListener('change', (e) => {
-    ctx.fillStyle = e.target.value;
-    ctx.fillRect(0, 0, canvas.width, canvas.height); 
-});
-fontpicker.addEventListener('change', (event) => {
-            ctx.lineWidth = event.target.value;
-           
-        });
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false);
 
         clearbutton.addEventListener('click', () => {
+            ctx.fillStyle = canvascolor.value || "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        });
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }) 
-        
         savebutton.addEventListener('click', () => {
-            localStorage.setItem('canvasContents', canvas.toDataURL());
-
-            let link = document.createElement('a');
-
-            link.download = 'my-canvas.png';
-            link.href = canvas.toDataURL();
-
+            const dataURL = canvas.toDataURL();
+            localStorage.setItem('canvasContents', dataURL);
+            const link = document.createElement('a');
+            link.download = 'mysignature.png';
+            link.href = dataURL;
             link.click();
         });
 
         retrivebutton.addEventListener('click', () => {
-        
-            let savedCanvas = localStorage.getItem('canvasContents');
-
+            const savedCanvas = localStorage.getItem('canvasContents');
             if (savedCanvas) {
-                let img = new Image();
+                const img = new Image();
                 img.src = savedCanvas;
-                ctx.drawImage(img, 0, 0);
+                img.onload = () => ctx.drawImage(img, 0, 0);
             }
         });
-
-
-
-        
-        
     </script>
-    
-<footer>
-    <header>
-        <div class="header">
-            <img src="fav icon/1682857146789.jpg" alt="" height="700px" width="700px">     
-        </div>
-    </header>
-</footer>
-    
 </body>
->>>>>>> master
 </html>
