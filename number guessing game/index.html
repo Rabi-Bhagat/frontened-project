@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Number Guessing Game</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .restart-btn {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            display: none;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -15,10 +23,11 @@
             <button onclick="makeGuess()">Submit Guess</button>
             <p id="feedback"></p>
             <p id="attempts">Attempts: 0</p>
+            <button class="restart-btn" id="restartBtn" onclick="restartGame()">Restart Game</button>
         </div>
     </div>
+
     <script>
-        
         let randomNumber = Math.floor(Math.random() * 101);
         let noOfGuesses = 0;
 
@@ -45,10 +54,23 @@
                 guessInput.disabled = true;
                 document.querySelector('button').disabled = true;
                 attempts.textContent = `Congratulations! You guessed the number in ${noOfGuesses} attempts. You are the winner!`;
+                document.getElementById('restartBtn').style.display = 'inline-block';
             }
 
             guessInput.value = '';
             guessInput.focus();
+        }
+
+        function restartGame() {
+            randomNumber = Math.floor(Math.random() * 101);
+            noOfGuesses = 0;
+            document.getElementById('guessInput').disabled = false;
+            document.querySelector('button').disabled = false;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('attempts').textContent = 'Attempts: 0';
+            document.getElementById('guessInput').value = '';
+            document.getElementById('guessInput').focus();
+            document.getElementById('restartBtn').style.display = 'none';
         }
 
         document.getElementById('guessInput').addEventListener('keypress', function(e) {
