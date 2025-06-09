@@ -366,7 +366,7 @@
             const dataURL = canvas.toDataURL(`image/${format}`, format === 'jpeg' ? 0.9 : 1.0);
             localStorage.setItem('canvasContents', dataURL);
             const link = document.createElement('a');
-            link.download = `Rabi_bhagat.${format}`;
+            link.download = `Rabi_Bhagat.${format}`;
             link.href = dataURL;
             link.click();
         });
