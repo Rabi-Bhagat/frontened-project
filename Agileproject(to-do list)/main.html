@@ -6,7 +6,6 @@
     <title>Add Tasks</title>
     <link rel="stylesheet" href="add_task.css">
 
-    <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
 
     <style>
@@ -15,10 +14,9 @@
 
 
 
-        /* Style to make the calendar smaller */
         #calendar-container {
-            width: 300px; /* Adjust width */
-            height: 250px; /* Adjust height */
+            width: 300px; 
+            height: 250px; 
             margin: auto;
             overflow: hidden;
         }
@@ -28,7 +26,6 @@
             height: 100%;
         }
 
-        /* Reduce font size of calendar text */
         .fc {
             font-size: 12px;
         }
@@ -58,7 +55,7 @@
 
     <h2 class="first">Date:</h2>
     <div id="calendar-container">
-        <div id="calendar"></div> <!-- FullCalendar with smaller size -->
+        <div id="calendar"></div> 
     </div>
 
     <h2 class="first">Reminder:</h2>
@@ -83,18 +80,17 @@
     </a>
 </footer>
 
-<!-- FullCalendar Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth', // Month view
-            selectable: true, // Allows selection
+            initialView: 'dayGridMonth', 
+            selectable: true, 
             dateClick: function(info) {
-                alert('Selected Date: ' + info.dateStr); // Alert the selected date
+                alert('Selected Date: ' + info.dateStr); 
             },
-            height: '100%', // Adjust height dynamically
+            height: '100%', 
             contentHeight: 'auto'
         });
         calendar.render();

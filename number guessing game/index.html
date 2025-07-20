@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .restart-btn {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            display: none;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Number Guessing Game</h1>
+        <p>Guess a number between 0 and 100!</p>
+        <div class="game-area">
+            <input type="number" id="guessInput" min="0" max="100" placeholder="Enter your guess">
+            <button onclick="makeGuess()">Submit Guess</button>
+            <p id="feedback"></p>
+            <p id="attempts">Attempts: 0</p>
+            <button class="restart-btn" id="restartBtn" onclick="restartGame()">Restart Game</button>
+        </div>
+    </div>
+
+    <script>
+        let randomNumber = Math.floor(Math.random() * 101);
+        let noOfGuesses = 0;
+
+        function makeGuess() {
+            const guessInput = document.getElementById('guessInput');
+            const feedback = document.getElementById('feedback');
+            const attempts = document.getElementById('attempts');
+            const guessed = parseInt(guessInput.value);
+
+            if (isNaN(guessed) || guessed < 0 || guessed > 100) {
+                feedback.textContent = "Please enter a valid number between 0 and 100.";
+                return;
+            }
+
+            noOfGuesses++;
+            attempts.textContent = `Attempts: ${noOfGuesses}`;
+
+            if (guessed > randomNumber) {
+                feedback.textContent = `Please enter a lower number than ${guessed}.`;
+            } else if (guessed < randomNumber) {
+                feedback.textContent = `Please enter a higher number than ${guessed}.`;
+            } else {
+                feedback.textContent = "!! Congrats !! You guessed the correct number! Your prize is 7 crores!";
+                guessInput.disabled = true;
+                document.querySelector('button').disabled = true;
+                attempts.textContent = `Congratulations! You guessed the number in ${noOfGuesses} attempts. You are the winner!`;
+                document.getElementById('restartBtn').style.display = 'inline-block';
+            }
+
+            guessInput.value = '';
+            guessInput.focus();
+        }
+
+        function restartGame() {
+            randomNumber = Math.floor(Math.random() * 101);
+            noOfGuesses = 0;
+            document.getElementById('guessInput').disabled = false;
+            document.querySelector('button').disabled = false;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('attempts').textContent = 'Attempts: 0';
+            document.getElementById('guessInput').value = '';
+            document.getElementById('guessInput').focus();
+            document.getElementById('restartBtn').style.display = 'none';
+        }
+
+        document.getElementById('guessInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                makeGuess();
+            }
+        });
+    </script>
+</body>
+</html>
