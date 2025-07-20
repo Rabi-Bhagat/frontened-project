@@ -6,7 +6,7 @@
 
 h1 {
   background-color: #081b31;
-  color: #fff;
+  color: gold;
   height: 5rem;
   line-height: 5rem;
 }
@@ -22,7 +22,7 @@ h1 {
 
 .choice:hover {
   cursor: pointer;
-  background-color: #081b31;
+  background-color: #020f1d;
 }
 
 img {
@@ -60,7 +60,7 @@ img {
 
 #msg {
   background-color: #081b31;
-  color: #fff;
+  color: silver;
   font-size: 2rem;
   display: inline;
   padding: 1rem;
